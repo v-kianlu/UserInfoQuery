@@ -1,0 +1,147 @@
+﻿@model IEnumerable<YourProject.Models.CurrentADUserContact>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.DisplayName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.DistinguishedName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Title)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.City)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.State)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ZipCode)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CountryOrRegion)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Company)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Location)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Building)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.BusinessEmail)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.BusinessPhone1)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.BusinessPhone2)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.HomePhone1)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.HomePhone2)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.MobilePhone)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Department)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.StreetAddress)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CreatedOn)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.RowState)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.DisplayName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.DistinguishedName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Title)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.City)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.State)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ZipCode)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.CountryOrRegion)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Company)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Location)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Building)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.BusinessEmail)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.BusinessPhone1)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.BusinessPhone2)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.HomePhone1)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.HomePhone2)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.MobilePhone)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Department)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.StreetAddress)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.CreatedOn)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.RowState)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.AliasId }) |
+            @Html.ActionLink("Details", "Details", new { id=item.AliasId }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.AliasId })
+        </td>
+    </tr>
+}
+
+</table>
