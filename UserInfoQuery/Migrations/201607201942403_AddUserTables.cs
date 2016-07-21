@@ -3,7 +3,7 @@ namespace UserInfoQuery.Migrations
     using System;
     using System.Data.Entity.Migrations;
     
-    public partial class AddTables : DbMigration
+    public partial class AddUserTables : DbMigration
     {
         public override void Up()
         {
@@ -13,10 +13,8 @@ namespace UserInfoQuery.Migrations
                     {
                         GroupAliasId = c.String(nullable: false, maxLength: 200),
                         MemberAliasId = c.String(nullable: false, maxLength: 200),
-                        RowState = c.Int(nullable: false),
-                        UniqueName = c.String(nullable: false, maxLength: 401),
                     })
-                .PrimaryKey(t => new { t.GroupAliasId, t.MemberAliasId, t.RowState, t.UniqueName });
+                .PrimaryKey(t => new { t.GroupAliasId, t.MemberAliasId });
             
             CreateTable(
                 "dbo.CurrentADUserContact",
@@ -25,24 +23,14 @@ namespace UserInfoQuery.Migrations
                         AliasId = c.String(nullable: false, maxLength: 100),
                         DisplayName = c.String(maxLength: 500),
                         DistinguishedName = c.String(maxLength: 500),
-                        Title = c.String(maxLength: 500),
-                        City = c.String(maxLength: 1000),
-                        State = c.String(maxLength: 50),
-                        ZipCode = c.String(maxLength: 50),
-                        CountryOrRegion = c.String(maxLength: 50),
                         Company = c.String(maxLength: 200),
-                        Location = c.String(maxLength: 255),
                         Building = c.String(maxLength: 255),
                         BusinessEmail = c.String(maxLength: 255),
                         BusinessPhone1 = c.String(maxLength: 255),
                         BusinessPhone2 = c.String(maxLength: 255),
-                        HomePhone1 = c.String(maxLength: 255),
-                        HomePhone2 = c.String(maxLength: 255),
                         MobilePhone = c.String(maxLength: 255),
                         Department = c.String(maxLength: 200),
-                        StreetAddress = c.String(),
                         CreatedOn = c.DateTime(nullable: false),
-                        RowState = c.Int(nullable: false),
                     })
                 .PrimaryKey(t => t.AliasId);
             

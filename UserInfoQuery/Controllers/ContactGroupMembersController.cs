@@ -9,7 +9,6 @@ using System.Web;
 using System.Web.Mvc;
 using UserInfoQuery.Models;
 using YourProjectName.Models;
-using System.DirectoryServices.AccountManagement;
 
 namespace UserInfoQuery.Controllers
 {
@@ -49,7 +48,7 @@ namespace UserInfoQuery.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create([Bind(Include = "GroupAliasId,MemberAliasId,RowState,UniqueName")] ContactGroupMember contactGroupMember)
+        public async Task<ActionResult> Create([Bind(Include = "GroupAliasId,MemberAliasId")] ContactGroupMember contactGroupMember)
         {
             if (ModelState.IsValid)
             {
@@ -81,7 +80,7 @@ namespace UserInfoQuery.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit([Bind(Include = "GroupAliasId,MemberAliasId,RowState,UniqueName")] ContactGroupMember contactGroupMember)
+        public async Task<ActionResult> Edit([Bind(Include = "GroupAliasId,MemberAliasId")] ContactGroupMember contactGroupMember)
         {
             if (ModelState.IsValid)
             {
@@ -127,52 +126,20 @@ namespace UserInfoQuery.Controllers
             base.Dispose(disposing);
         }
 
-
-        private void GetContactGroupMembersFromAD()
+        [ActionName("GetInfo")]
+        public async Task<ActionResult> GetUserInfoFromAD()
         {
-            List<UserPrincipal> group = new List<UserPrincipal>();
-            string domain = "redmond.corp.microsoft.com";
-            string sam = "gststeam";
-            try
-            {
-                PrincipalContext ad = new PrincipalContext(ContextType.Domain, domain);
-                UserPrincipal u = new UserPrincipal(ad);
-                GroupPrincipal g = GroupPrincipal.FindByIdentity(ad, IdentityType.SamAccountName, sam);
-                PrincipalSearchResult<Principal> groupMembers = g.GetMembers();
-
-                foreach (UserPrincipal user in groupMembers)
-                {
-                    group.Add(user);
-                }
-
-                addToDb(group);
-
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine("Error: ", e);
-            }
-
+            AD ad = new AD(db);
+            ad.GetContactGroupMembers();
+            await db.SaveChangesAsync();
+            return RedirectToAction("Index");
         }
-
-
-        private void addToDb(List<UserPrincipal> group)
+        [ActionName("Clear")]
+        public async Task<ActionResult> ClearTable()
         {
-            foreach (UserPrincipal user in group)
-            {
-
-                string groupString = "";
-                foreach (GroupPrincipal userGroup in user.GetGroups())
-                {
-                    if (userGroup == user.GetGroups().Last())
-                        groupString += userGroup.Name;
-                    else
-                        groupString += userGroup.Name + ", ";
-                }
-
-
-
-            }
+            db.ContactGroupMembers.RemoveRange(db.ContactGroupMembers);
+            await db.SaveChangesAsync();
+            return RedirectToAction("Index");
         }
     }
 }

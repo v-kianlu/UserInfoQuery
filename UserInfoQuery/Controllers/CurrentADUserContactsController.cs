@@ -9,9 +9,6 @@ using System.Web;
 using System.Web.Mvc;
 using UserInfoQuery.Models;
 using YourProject.Models;
-using System.DirectoryServices;
-using System.DirectoryServices.AccountManagement;
-using YourProjectName.Models;
 
 namespace UserInfoQuery.Controllers
 {
@@ -22,8 +19,6 @@ namespace UserInfoQuery.Controllers
         // GET: CurrentADUserContacts
         public async Task<ActionResult> Index()
         {
-            GetCurrentADUserContactsFromAD();
-            db.SaveChanges();
             return View(await db.CurrentADUserContacts.ToListAsync());
         }
 
@@ -53,7 +48,7 @@ namespace UserInfoQuery.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create([Bind(Include = "AliasId,DisplayName,DistinguishedName,Title,City,State,ZipCode,CountryOrRegion,Company,Location,Building,BusinessEmail,BusinessPhone1,BusinessPhone2,HomePhone1,HomePhone2,MobilePhone,Department,StreetAddress,CreatedOn,RowState")] CurrentADUserContact currentADUserContact)
+        public async Task<ActionResult> Create([Bind(Include = "AliasId,DisplayName,DistinguishedName,Company,Building,BusinessEmail,BusinessPhone1,BusinessPhone2,MobilePhone,Department,CreatedOn")] CurrentADUserContact currentADUserContact)
         {
             if (ModelState.IsValid)
             {
@@ -85,7 +80,7 @@ namespace UserInfoQuery.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit([Bind(Include = "AliasId,DisplayName,DistinguishedName,Title,City,State,ZipCode,CountryOrRegion,Company,Location,Building,BusinessEmail,BusinessPhone1,BusinessPhone2,HomePhone1,HomePhone2,MobilePhone,Department,StreetAddress,CreatedOn,RowState")] CurrentADUserContact currentADUserContact)
+        public async Task<ActionResult> Edit([Bind(Include = "AliasId,DisplayName,DistinguishedName,Company,Building,BusinessEmail,BusinessPhone1,BusinessPhone2,MobilePhone,Department,CreatedOn")] CurrentADUserContact currentADUserContact)
         {
             if (ModelState.IsValid)
             {
@@ -131,103 +126,20 @@ namespace UserInfoQuery.Controllers
             base.Dispose(disposing);
         }
 
-
-        private void GetCurrentADUserContactsFromAD()
+        [ActionName("GetInfo")]
+        public async Task<ActionResult> GetUserInfoFromAD()
         {
-            List<UserPrincipal> group = new List<UserPrincipal>();
-            string domain = "redmond.corp.microsoft.com";
-            string groupSam = "gststeam";
-            
-            try
-            {
-                PrincipalContext ad = new PrincipalContext(ContextType.Domain, domain);
-                GroupPrincipal g = GroupPrincipal.FindByIdentity(ad, IdentityType.SamAccountName, groupSam);
-                PrincipalSearchResult<Principal> groupMembers = g.GetMembers();
-                
-                foreach(UserPrincipal user in groupMembers)
-                {
-                    AddCurrentADUserContacts(user);
-
-                }
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine("Error: ", e);
-            }
-
+            AD ad = new AD(db);
+            ad.GetCurrentADUserContactsFromAD();
+            await db.SaveChangesAsync();
+            return RedirectToAction("Index");
         }
-
-        //gets CurrentADUserContact's info and
-        //adds to CurrentADUserContact to the CurrentADUserContacts table
-        private void AddCurrentADUserContacts(UserPrincipal userP)
+        [ActionName("Clear")]
+        public async Task<ActionResult> ClearTable()
         {
-            string domain = "redmond.corp.microsoft.com";
-            string path = "LDAP://" + userP.DistinguishedName;
-
-            CurrentADUserContact person = new CurrentADUserContact();
-
-            DirectoryEntry de = new DirectoryEntry(domain);
-            de.Path = path;
-            de.AuthenticationType = AuthenticationTypes.Secure;
-            DirectorySearcher search = new DirectorySearcher(de);
-            SearchResult userD = search.FindOne();
-
-            person.CreatedOn = DateTime.UtcNow;
-
-            //gets AD info from the Principal way
-            person.DisplayName = userP.DisplayName;
-            person.AliasId = userP.SamAccountName;
-            person.BusinessEmail = userP.EmailAddress;
-            person.DistinguishedName = userP.DistinguishedName;
-
-            //gets AD info from the DirectoryEntry way
-            if (userD.Properties["telephonenumber"].Count == 1)
-                person.BusinessPhone1 = userD.Properties["telephonenumber"][0].ToString();
-            else
-            {
-                person.BusinessPhone2 = userD.Properties["telephonenumber"][1].ToString();
-                person.BusinessPhone1 = userD.Properties["telephonenumber"][0].ToString();
-            }
-            if (userD.Properties["company"].Count == 1)
-                person.Company = userD.Properties["company"][0].ToString();
-            if (userD.Properties["department"].Count == 1)
-                person.Department = userD.Properties["department"][0].ToString();
-            if (userD.Properties["physicaldeliveryofficename"].Count == 1)
-                person.Building = userD.Properties["physicaldeliveryofficename"][0].ToString();
-            if (userD.Properties["mobile"].Count == 1)
-                person.MobilePhone = userD.Properties["mobile"][0].ToString();
-
-            //Missing table fields from AD
-            //person.HomePhone1
-            //person.HomePhone2
-            //person.Location
-            //person.CountryOrRegion
-            //person.State
-            //person.StreetAddress
-            //person.City
-            //person.Title;
-            //person.ZipCode
-
-            db.CurrentADUserContacts.Add(person);
-            AddContactGroupMember(userP);
-            
+            db.CurrentADUserContacts.RemoveRange(db.CurrentADUserContacts);
+            await db.SaveChangesAsync();
+            return RedirectToAction("Index");
         }
-        
-        //Gets ContactGroupMember info and
-        //adds ContactGroupMember to the ContactGroupMembers Table
-        private void AddContactGroupMember(UserPrincipal userP)
-        {
-            foreach (GroupPrincipal userGroup in userP.GetGroups())
-            {
-                ContactGroupMember group = new ContactGroupMember();
-                group.MemberAliasId = userP.SamAccountName;
-                group.GroupAliasId = userGroup.SamAccountName;
-
-                db.ContactGroupMembers.Add(group);
-            }
-
-        }
-
-  
     }
 }

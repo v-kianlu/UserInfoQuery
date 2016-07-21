@@ -11,11 +11,22 @@
 </p>
 <table class="table">
     <tr>
-        <th></th>
+        <th>
+            @Html.DisplayNameFor(model => model.GroupAliasId)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.MemberAliasId)
+        </th>
     </tr>
 
 @foreach (var item in Model) {
     <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.GroupAliasId)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.MemberAliasId)
+        </td>
         <td>
             @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
             @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
@@ -23,5 +34,9 @@
         </td>
     </tr>
 }
+   
+    @Html.ActionLink("Populate table from Active Directory", "GetInfo")
+    <p><p>
+    @Html.ActionLink("Clear Table", "Clear")
 
 </table>

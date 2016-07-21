@@ -7,13 +7,13 @@ namespace UserInfoQuery.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.1.3-40302")]
-    public sealed partial class AddTables : IMigrationMetadata
+    public sealed partial class AddUserTables : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(AddTables));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(AddUserTables));
         
         string IMigrationMetadata.Id
         {
-            get { return "201607131751598_AddTables"; }
+            get { return "201607201942403_AddUserTables"; }
         }
         
         string IMigrationMetadata.Source

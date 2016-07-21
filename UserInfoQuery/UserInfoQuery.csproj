@@ -170,6 +170,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\AD.cs" />
     <Compile Include="Controllers\ContactGroupMembersController.cs" />
     <Compile Include="Controllers\CurrentADUserContactsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -177,9 +178,9 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201607131751598_AddTables.cs" />
-    <Compile Include="Migrations\201607131751598_AddTables.Designer.cs">
-      <DependentUpon>201607131751598_AddTables.cs</DependentUpon>
+    <Compile Include="Migrations\201607201942403_AddUserTables.cs" />
+    <Compile Include="Migrations\201607201942403_AddUserTables.Designer.cs">
+      <DependentUpon>201607201942403_AddUserTables.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -258,6 +259,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\AD\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
@@ -268,8 +270,8 @@
     <Content Include="Scripts\jquery-1.10.2.min.map" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201607131751598_AddTables.resx">
-      <DependentUpon>201607131751598_AddTables.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201607201942403_AddUserTables.resx">
+      <DependentUpon>201607201942403_AddUserTables.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

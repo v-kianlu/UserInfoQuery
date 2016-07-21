@@ -16,15 +16,5 @@ namespace YourProjectName.Models
         [StringLength(200)]
         public string MemberAliasId { get; set; }
 
-        [Key]
-        [Column(Order = 2)]
-        [DatabaseGenerated(DatabaseGeneratedOption.None)]
-        public int RowState { get; set; }
-
-        [Key]
-        [Column(Order = 3)]
-        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
-        [StringLength(401)]
-        public string UniqueName { get; set; }
     }
 }

@@ -24,7 +24,9 @@ namespace UserInfoQuery.Models
     {
         public DbSet<ContactGroupMember> ContactGroupMembers { get; set; }
         public DbSet<CurrentADUserContact> CurrentADUserContacts { get; set; }
-        public ApplicationDbContext()
+
+
+        public  ApplicationDbContext()
             : base("DefaultConnection", throwIfV1Schema: false)
         {
         }
@@ -33,6 +35,7 @@ namespace UserInfoQuery.Models
         {
             return new ApplicationDbContext();
         }
+
 
 
     }
